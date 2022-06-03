@@ -1,0 +1,22 @@
+pipeline
+{
+agent { label 'slave1'}
+stages{
+stage('download'){
+steps{
+git credentialsId: 'Generate Credentials', url: 'https://github.com/Himavaishnavi/mavenrepo.git'
+	}
+	}
+	stage('build'){
+	    steps{
+	        sh 'mvn package'
+	    }
+	}
+	stage('sonar'){
+	    steps{
+	       withSonarQubeEnv('sonarqube') {
+    sh "mvn sonar:sonar"
+}
+	    }
+	}
+}}
